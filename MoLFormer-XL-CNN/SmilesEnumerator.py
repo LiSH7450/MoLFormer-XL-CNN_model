@@ -30,7 +30,7 @@ def augment_smiles(smiles, n=10, isomericSmiles=False):
 def main():
     path = r"/home/HYJ/174/molformer/data/DIR/train_src.csv"
     target_path = r"/home/HYJ/174/molformer/data/DIR/train.csv"
-    augment_num = 20
+    augment_num = 10
     df = pd.read_csv(path)
     len_df = len(df)
     lst = []
