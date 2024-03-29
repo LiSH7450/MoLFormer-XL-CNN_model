@@ -24,7 +24,7 @@ from sklearn import metrics
 
 
 class CNN(nn.Module):
-    def __init__(self, smiles_embed_dim):  # 调整Dropout率
+    def __init__(self, smiles_embed_dim):  
         super(CNN, self).__init__()
 
         self.conv_block = nn.Sequential(
