@@ -22,49 +22,10 @@ from tokenizer.tokenizer import MolTranBertTokenizer
 from pytorch_lightning.callbacks import EarlyStopping,ModelCheckpoint
 from sklearn import metrics
 
-#class TextCNN(nn.Module):
-#    def __init__(self, smiles_embed_dim, num_classes, dropout=0.5):
-#        super(TextCNN, self).__init__()
-#       self.num_classes = num_classes
 
-#       kernel_sizes = [3, 4, 5, 6, 7]  # 增加卷积核种类
-#       self.conv_blocks = nn.ModuleList()
-#       for k in kernel_sizes:
-#           conv_block = nn.Sequential(
-#               nn.Conv1d(in_channels=smiles_embed_dim, out_channels=128, kernel_size=k, padding=k-1),
-#               nn.BatchNorm1d(num_features=128),
-#               nn.ReLU(),
-#               nn.Conv1d(in_channels=128, out_channels=256, kernel_size=k, padding=k-1),
-#               nn.BatchNorm1d(num_features=256),
-#                nn.ReLU(),
-#                nn.Conv1d(in_channels=256, out_channels=512, kernel_size=k, padding=k-1),
-#                nn.BatchNorm1d(num_features=512),
-#               nn.ReLU(),
-#                nn.AdaptiveMaxPool1d(1)
-#            )
-#            self.conv_blocks.append(conv_block)
-
-#        self.dropout = nn.Dropout(dropout)
-#        self.fc1 = nn.Linear(len(kernel_sizes) * 512, 1024)  # 增加全连接层的输出神经元数量
-#        self.fc2 = nn.Linear(1024, num_classes)
-
-#    def forward(self, x):
-#        x = x.unsqueeze(1)
-#        x = x.permute(0, 2, 1)
-
-#        x_list = [block(x) for block in self.conv_blocks]
-#        x = torch.cat([xi.view(xi.size(0), -1) for xi in x_list], dim=1)
-
-#        x = self.dropout(x)
-#        x = F.relu(self.fc1(x))
-#        x = self.dropout(x)
-#        x = self.fc2(x)
-
-#        return x
-
-class TextCNN(nn.Module):
+class CNN(nn.Module):
     def __init__(self, smiles_embed_dim):  # 调整Dropout率
-        super(TextCNN, self).__init__()
+        super(CNN, self).__init__()
 
         self.conv_block = nn.Sequential(
             nn.Conv1d(in_channels=smiles_embed_dim, out_channels=smiles_embed_dim*3, kernel_size=3, padding=1),
@@ -128,7 +89,7 @@ class LightningModule(pl.LightningModule):
         self.loss = torch.nn.CrossEntropyLoss()
         # self.loss = torch.nn.BCELoss(reduction='sum')
 
-        self.net = TextCNN(config.n_embd)
+        self.net = CNN(config.n_embd)
         
         self.ffn = nn.Sequential(
             nn.Linear(config.n_embd, config.n_embd),
